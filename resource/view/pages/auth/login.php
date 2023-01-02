@@ -96,13 +96,13 @@ if (isset($_POST['login'])) {
                                         <button name="login" class="btn btn-primary btn-user btn-block">
                                             Login
                                         </button>
-                                        <hr>
-                                        <a href="#" class="btn btn-google btn-user btn-block">
+                                        <!-- <hr> -->
+                                        <!-- <a href="#" class="btn btn-google btn-user btn-block">
                                             <i class="fab fa-google fa-fw"></i> Login with Google
                                         </a>
                                         <a href="#" class="btn btn-facebook btn-user btn-block">
                                             <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
-                                        </a>
+                                        </a> -->
                                     </form>
                                     <hr>
                                     <div class="text-center">

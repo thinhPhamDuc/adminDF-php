@@ -12,9 +12,14 @@ if (isset($_POST['addProduct'])) {
   $seller_id = $_POST['user_addProduct'];
   $brand_id = $_POST['brand_addProduct'];
   $file_store = uploadImages('../../../../public/backend/assets/images/product/', '../main/manage-products.php');
+  // Upload mutiple images
+  $file_store_mutiple = uploadMutipleImages('../../../../public/backend/assets/images/product/', '../main/manage-products.php');
+  $file_store_mutiple_array = rtrim($file_store_mutiple, ",");
+  $array_mutiple_upload = explode(",",$file_store_mutiple_array);
+  // End upload mutiple images
   if ($name !== "" && $description !== "" && $price !== "" && $category !== "") {
     $sql = "INSERT INTO products (name, description, category_id, price, images,created_at,seller_id,brand_id) VALUES ('$name', '$description', '$category', '$price', '$file_store','$time','$seller_id','$brand_id')";
-
+    
     if ($conn->query($sql) === TRUE) {
       $sql = "SELECT * FROM products ORDER BY id DESC LIMIT 1";
       $last_id = $conn->insert_id;
@@ -25,6 +30,12 @@ if (isset($_POST['addProduct'])) {
       if (!empty($tags)) {
         foreach ($tags as $tag_id) {
           $sql = "INSERT INTO link_product_tag (product_id, tag_id) VALUES ('$product_id', '$tag_id')";
+          $conn->query($sql);
+        }
+      }
+      if (!empty($array_mutiple_upload)) {
+        foreach ($array_mutiple_upload as $uploadMutipleImage) {
+          $sql = "INSERT INTO product_images (product_id, images) VALUES ('$product_id', '$uploadMutipleImage')";
           $conn->query($sql);
         }
       }

@@ -11,12 +11,29 @@ if (isset($_POST['editProduct'])) {
   $category = $_POST['category_editProduct'];
   $price = $_POST['price_editProduct'];
   $file_store = editImages('../../../../public/backend/assets/images/product/', '../main/manage-products.php', 'products', $id);
-
+  $product_slug = createSlug($name);
+  // $file = editMutipleImages('../../../../public/backend/assets/images/product/', '../main/manage-products.php', 'product_images', $id);
+  // $file_store_mutiple_array = rtrim($file, ",");
+  // $array_mutiple_upload = explode(",", $file_store_mutiple_array);
+  // $sqlUnlinkProductImages = "SELECT * FROM product_images WHERE product_id = '$id' ";
+  // $fetchUnlinkProductImages = mysqli_fetch_all(mysqli_query($conn, $sqlUnlinkProductImages));
+  // foreach ($fetchUnlinkProductImages as $key => $fetchUnlink) {
+  //   unlink($fetchUnlink[2]);
+  // }
   if ($name !== "" || $price !== "" || $category !== "") {
-    $sql = "UPDATE products SET name = '$name', description = '$description', category_id = '$category', price = '$price', images = '$file_store' WHERE id = '$id' ";
+    $sql = "UPDATE products SET name = '$name', description = '$description', category_id = '$category', price = '$price', images = '$file_store' , slug = '$product_slug' WHERE id = '$id' ";
     $sql1 = "UPDATE inventory SET name = '$name', images = '$file_store',price = '$price'   WHERE product_id = '$id' ";
+    // $sql2 = "DELETE FROM product_images where product_id = '$id' ";
     if ($conn->query($sql) === TRUE && $conn->query($sql1) === TRUE) {
       $tags = $_POST["tags"];
+      // upload mutiple images 
+      // if (!empty($array_mutiple_upload)) {
+      //   foreach ($array_mutiple_upload as $uploadMutipleImage) {
+      //     $sql = "INSERT INTO product_images (product_id, images) VALUES ('$id', '$uploadMutipleImage')";
+      //     $conn->query($sql);
+      //   }
+      // }
+      // end upload images
       if (!empty($tags)) {
         $sql = "SELECT * FROM link_product_tag WHERE product_id = " . $id;
         $result = $conn->query($sql);

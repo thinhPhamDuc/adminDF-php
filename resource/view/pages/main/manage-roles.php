@@ -111,10 +111,10 @@ $users = $conn->query($sql);
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body">
-                                    <input type="hidden" id="id_editUser" name="id_editUser">
+                                    <input type="hidden" id="id_editRoles" name="id_editRoles">
                                     <div class="form-group">
-                                    <label for="firstname_editUser">Name:</label>
-                                    <input type="text" name="firstname_editUser" id="firstname_editUser" class="form-control">
+                                    <label for="name_editRoles">Name:</label>
+                                    <input type="text" name="name_editRoles" id="name_editRoles" class="form-control">
                                     </div>
                                 </div>
                                 <div class="modal-footer">

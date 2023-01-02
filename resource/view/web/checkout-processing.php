@@ -7,23 +7,60 @@ session_start();
 
 include '../../../database/database.php';
 include '../../../function/function-web.php';
-    $externalId = '#' . rand(1000, 9999);
-    $total = $_SESSION['total'];
-    date_default_timezone_set('Asia/Ho_Chi_Minh');
-    $time = date('Y-m-d H:i:s');
-    $deleted_at = null;
-    if ($externalId !== "" && $total !== "") {
-      $sql = "INSERT INTO orders (external_id, created_at, deleted_at, total) VALUES ('$externalId', '$time', '$deleted_at','$total')";
-      print_r($sql);
-      $sql1 = '';
-      if ($conn->query($sql) === TRUE) {
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require '../../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require '../../../vendor/phpmailer/phpmailer/src/Exception.php';
+require '../../../vendor/phpmailer/phpmailer/src/SMTP.php';
+function sendEmail($email, $name, $title, $content)
+{
+  $mail = new PHPMailer(true);
+  try {
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'phamducthinhbeo@gmail.com';
+    $mail->Password = 'iccghlkeustsrqfy';
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587;
+
+    $mail->setFrom('phamducthinhbeo@gmail.com', 'Web Admin');
+
+    $mail->addAddress($email, $name);
+
+    $mail->isHTML(true);
+    $mail->Subject = $title;
+    $mail->Body = $content;
+    $mail->CharSet = 'UTF-8';
+    $mail->send();
+    return true;
+  } catch (Exception $e) {
+    return false;
+  }
+}
+
+$externalId = '#' . rand(1000, 9999);
+$total = $_SESSION['total'];
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+$time = date('Y-m-d H:i:s');
+$deleted_at = null;
+$infoMail = '';
+
+if ($externalId !== "" && $total !== "") {
+    $sql = "INSERT INTO orders (external_id, created_at, deleted_at, total) VALUES ('$externalId', '$time', '$deleted_at','$total')";
+    $sql1 = '';
+    if ($conn->query($sql) === TRUE) {
         $sql = "SELECT * FROM orders ORDER BY id DESC LIMIT 1";
         $orderId = $conn->insert_id;
         $value = '';
         $valueInventory = '';
-        $valueStock ='';
-        $count = count($_SESSION['cart'])-1;
+        $valueStock = '';
+        $count = count($_SESSION['cart']) - 1;
         foreach ($_SESSION['cart'] as $key => $orderItem) {
+            $productName = $orderItem['name'];            
             $product_id = $orderItem['product_id'];
             $itemPrice = $orderItem['price'];
             $stock = $orderItem['stock'];
@@ -31,10 +68,15 @@ include '../../../function/function-web.php';
             $client_id = $_SESSION['client']['id'];
             $value .= "('$orderId','$product_id' ,'$stock','$total','$client_id',$itemPrice),";
             $valueInventory .= "$product_id,";
-            $valueStock .= $stock.',';
+            $valueStock .= $stock . ',';
+            $infoMail .= 'Sản phẩm ' . $productName . ' có số lượng' . $stock . ' có tổng' . $total . ',';  
         }
+        $content = 'Chúc mừng bạn đã thanh toán thành công<br>
+                Tài khoản của bạn là :<br>
+                username: ' . $_SESSION['client']['name'] . '<br>' . 'Tổng giá trị đơn hàng'. $_SESSION['total'] . $infoMail;
+        sendEmail($_SESSION['client']['email'], $_SESSION['client']['name'], 'Thanh toán thành công!', $content);
         $newvalueStock = rtrim($valueStock, ",");
-        $arraynewvalueStock = (explode(",",$newvalueStock));
+        $arraynewvalueStock = (explode(",", $newvalueStock));
 
         $newValue = rtrim($value, ",");
         $newValueInventory = rtrim($valueInventory, ",");
@@ -54,10 +96,9 @@ include '../../../function/function-web.php';
                                 } else {
                                     echo "Lỗi";
                                 }
+                            } else {
+                                echo "<script>alert('Sản phẩm '. $inventory[1] .' hiện đã hết!');</script>";
                             }
-                            else {
-                                echo "<script>alert('Sản phẩm '. $inventory[1] .' hiện đã hết!');</script>"; 
-                            }  
                         }
                     }
                 }
@@ -67,11 +108,10 @@ include '../../../function/function-web.php';
             echo "<script>alert('Hoàn tất thanh toán'); window.location='checkout-success.php';</script>";
         } else {
             echo 'aaaaaaa';
-        }  
-
-      } else {
-        echo "Error : " . $sql . "<br>" . $conn->error;
-      }
+        }
     } else {
-      echo "<script>alert('Please Enter Information'); window.location='../main/manage-products.php';</script>";
+        echo "Error : " . $sql . "<br>" . $conn->error;
     }
+} else {
+    echo "<script>alert('Please Enter Information'); window.location='../main/manage-products.php';</script>";
+}

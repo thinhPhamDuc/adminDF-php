@@ -7,13 +7,29 @@ session_start();
 
 include '../../../database/database.php';
 include '../../../function/function-web.php';
-$sql = "SELECT * FROM products INNER JOIN inventory on products.id = inventory.product_id where stock > 0";
 
-$result = $conn->query($sql);
 
-$sql1 = "SELECT * FROM products INNER JOIN inventory on products.id = inventory.product_id where stock > 0";
 
-$result1 = $conn->query($sql1);
+
+
+if (isset($_GET['category'])) {
+    $sql = "SELECT * FROM products INNER JOIN inventory on products.id = inventory.product_id where stock > 0 and category_id = " . $_GET['category'];
+    $result = $conn->query($sql);
+    $result1 = $conn->query($sql);
+
+} elseif (isset($_GET['brand'])) {
+    $sql = "SELECT * FROM products INNER JOIN inventory on products.id = inventory.product_id where stock > 0 and brand_id = " . $_GET['brand'];
+    $result = $conn->query($sql);
+    $result1 = $conn->query($sql);
+
+} else {
+    $sql = "SELECT * FROM products INNER JOIN inventory on products.id = inventory.product_id where stock > 0";
+
+    $result = $conn->query($sql);
+    $result1 = $conn->query($sql);
+
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -60,39 +76,8 @@ $result1 = $conn->query($sql1);
     <!-- page-wraper start -->
     <div id="page-wrapper">
         <!-- header-area start -->
-        <header>
-            <!-- header-top-area start -->
-            <div class="header-top-area" id="sticky-header">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6 col-md-2">
-                            <!-- logo-area start -->
-                            <div class="logo-area">
-                                <a href="index.php"><img src="../../../public/frontend/assetss/images/logo/1.png" alt="logo"></a>
-                            </div>
-                            <!-- logo-area end -->
-                        </div>
-                        <div class="col-md-7 d-none d-lg-block">
-                            <!-- menu-area start -->
-                            <div class="menu-area">
-                                <nav>
-                                    <ul>
-                                        <li class="active"><a href="index.php">Trang chủ</a></li>
-                                        <?php include '../web/partial/menu.php'; ?>
-                                        <li><a href="shop.php">Shop</a></li>
-                                        <li><a href="blog.php">Tin Tức</a></li>
-                                        <li><a href="contact.php">liên hệ</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                            <!-- menu-area end -->
-                        </div>
-                        <?php include '../web/partial/cart-ping.php'; ?>
+        <?php include '../web/partial/topBar.php'; ?>
 
-                    </div>
-                </div>
-            </div>
-        </header>
         <!-- header-area end -->
         <!-- breadcrumbs-area start -->
         <div class="breadcrumbs-area">
@@ -171,7 +156,22 @@ $result1 = $conn->query($sql1);
                                                                     } else {
                                                                         echo '../../../public/backend/assets/images/defaultImages.png';
                                                                     } ?>" alt="product" class="primary">
-                                                        <!-- <img src="../../../public/frontend/assetss/images/product/2.jpg" alt="product" class="secondary"> -->
+                                                        <?php
+                                                        $sql2 = "SELECT * FROM product_images where product_id = " . $row['product_id'];
+
+                                                        $result2 = $conn->query($sql2);
+                                                        if ($result2->num_rows > 0) {
+                                                            while ($row2 = $result2->fetch_assoc()) {
+                                                        ?>
+                                                                <img src="<?php if (substr($row2['images'], 3)) {
+                                                                                echo substr($row2['images'], 3);
+                                                                            } else {
+                                                                                echo '../../../public/backend/assets/images/defaultImages.png';
+                                                                            } ?>" alt="product" class="secondary">
+                                                        <?php
+                                                            }
+                                                        }
+                                                        ?>
                                                     </a>
                                                     <!-- <span class="sale">sale</span> -->
                                                     <!-- <form action="" method="post">
@@ -306,14 +306,24 @@ $result1 = $conn->query($sql1);
                                 </div>
                                 <div class="categories-list">
                                     <ul>
-                                        <li><a href="#">Nữ (69)</a></li>
-                                        <li><a href="#">Áo len (19)</a></li>
-                                        <li><a href="#">Aó Khoác (16)</a></li>
-                                        <li><a href="#">Nam (59)</a></li>
-                                        <li><a href="#">Áo sơ mi (14)</a></li>
-                                        <li><a href="#">Quần áo Thể Thao (12)</a></li>
-                                        <li><a href="#">Thời trang công sở (17)</a></li>
-                                        <li><a href="#">Phụ kiện (17)</a></li>
+                                        <?php
+                                        $sqlCategories = "SELECT * FROM product_categories ORDER BY name ASC";
+                                        $categoriesProducts = $conn->query($sqlCategories);
+                                        // $list_categories = [];
+                                        if ($categoriesProducts->num_rows > 0) {
+                                            while ($rowCategories = $categoriesProducts->fetch_assoc()) {
+                                        ?>
+                                                <li><a href="shop.php?category=<?php echo $rowCategories['id'] ?>"><?php echo $rowCategories['name']; ?> (<?php
+                                                                                                                                                            require '../../../database/database.php';
+                                                                                                                                                            $sql = mysqli_query($conn, "SELECT * FROM products where category_id =  " . $rowCategories['id']);
+                                                                                                                                                            $nrows = mysqli_num_rows($sql);
+                                                                                                                                                            echo $nrows;
+                                                                                                                                                            ?>)</a></li>
+                                        <?php
+
+                                            }
+                                        }
+                                        ?>
                                     </ul>
                                 </div>
                             </div>
@@ -333,10 +343,23 @@ $result1 = $conn->query($sql1);
                                 </div>
                                 <div class="categories-list">
                                     <ul>
-                                        <li><a href="#">Calvin Klein (11)</a></li>
-                                        <li><a href="#">Diesel (15)</a></li>
-                                        <li><a href="#">Polo (13)</a></li>
-                                        <li><a href="#">Tommy Hilfiger (14)</a></li>
+                                        <?php
+                                        $sqlBrands = "SELECT * FROM brand ORDER BY name ASC";
+                                        $brandProducts = $conn->query($sqlBrands);
+                                        if ($brandProducts->num_rows > 0) {
+                                            while ($rowBrands = $brandProducts->fetch_assoc()) {
+                                        ?>
+                                                <li><a href="shop.php?brand=<?php echo $rowBrands['id'] ?>"><?php echo $rowBrands['name']; ?> (<?php
+                                                                                                                            require '../../../database/database.php';
+                                                                                                                            $sql = mysqli_query($conn, "SELECT * FROM products where brand_id =  " . $rowBrands['id']);
+                                                                                                                            $nrows = mysqli_num_rows($sql);
+                                                                                                                            echo $nrows;
+                                                                                                                            ?>)</a></li>
+                                        <?php
+
+                                            }
+                                        }
+                                        ?>
                                     </ul>
                                 </div>
                             </div>
@@ -344,33 +367,27 @@ $result1 = $conn->query($sql1);
                             <!-- single-shop start -->
                             <div class="single-shop mb-40">
                                 <div class="categories-title">
-                                    <h3>Size</h3>
+                                    <h3>Tag</h3>
                                 </div>
                                 <div class="categories-list">
                                     <ul>
-                                        <li><a href="#">L (14)</a></li>
-                                        <li><a href="#">M (11)</a></li>
-                                        <li><a href="#">S (12)</a></li>
-                                        <li><a href="#">XL (14)</a></li>
-                                        <li><a href="#">XS (12)</a></li>
-                                        <li><a href="#">XXL (13)</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- single-shop end -->
-                            <!-- single-shop start -->
-                            <div class="single-shop mb-40">
-                                <div class="categories-title">
-                                    <h3>Màu Sắc</h3>
-                                </div>
-                                <div class="categories-list">
-                                    <ul>
-                                        <li><a href="#">Đen(12)</a></li>
-                                        <li><a href="#">Xanh da trời (10)</a></li>
-                                        <li><a href="#">Xanh lá (14)</a></li>
-                                        <li><a href="#">Xám (14)</a></li>
-                                        <li><a href="#">Đỏ (12)</a></li>
-                                        <li><a href="#">Trắng (13)</a></li>
+                                        <?php
+                                        $sqlTags = "SELECT * FROM product_tag ORDER BY name ASC";
+                                        $tagProducts = $conn->query($sqlTags);
+                                        if ($tagProducts->num_rows > 0) {
+                                            while ($rowTags = $tagProducts->fetch_assoc()) {
+                                        ?>
+                                                <li><a href="#"><?php echo $rowTags['name']; ?> (<?php
+                                                                                                    require '../../../database/database.php';
+                                                                                                    $sql = mysqli_query($conn, "SELECT * FROM link_product_tag where tag_id =  " . $rowTags['id']);
+                                                                                                    $nrows = mysqli_num_rows($sql);
+                                                                                                    echo $nrows;
+                                                                                                    ?>)</a></li>
+                                        <?php
+
+                                            }
+                                        }
+                                        ?>
                                     </ul>
                                 </div>
                             </div>

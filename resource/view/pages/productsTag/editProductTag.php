@@ -3,7 +3,7 @@ include '../../../../database/database.php';
 include '../../../../function/function.php';
 
 $id = $_POST['id_editProductTag'];
-$name = test_input($_POST['name_editProductTag']);
+$name = $_POST['name_editProductTag'];
 
 if ($name === "") {
   echo "<script>alert('Không được để rỗng!'); window.location = '../main/manage-productsTag.php';</script>";

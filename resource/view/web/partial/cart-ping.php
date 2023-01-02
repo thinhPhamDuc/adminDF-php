@@ -43,7 +43,7 @@
 
                                                             <div class="single-cart">
                                                                 <div class="cart-img">
-                                                                    <a href="product-details.php"><img src="<?php echo substr($itemCart['image'], 3); ?>" alt="book" /></a>
+                                                                    <a href="product-details.php?id=<?php echo $itemCart['product_id'] ?>"><img src="<?php echo substr($itemCart['image'], 3); ?>" alt="book" /></a>
                                                                 </div>
                                                                 <div class="cart-info">
                                                                     <h5><a href="product-details.php"><?php echo $itemCart['name']; ?></a></h5>

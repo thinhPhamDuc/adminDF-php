@@ -7,15 +7,17 @@ session_start();
 
 include '../../../database/database.php';
 include '../../../function/function-web.php';
-$nameError = $phoneError = $passwordError = $confirmError = $textError = $addressError = "";
-$name = $phone =  $password = $confirm = $address = "";
+$nameError = $phoneError = $passwordError = $confirmError = $textError = $addressError =  $emailError = "";
+$name = $phone =  $password = $confirm = $address = $email = "";
 if (isset($_POST["register"])) {
   $name = test_input($_POST["name"]);
   $phone = test_input($_POST["phone"]);
   $password = test_input($_POST["password"]);
   $confirm = test_input($_POST["confirm"]);
   $address = test_input($_POST["address"]);
-  if ($name === "" || $phone === "" || $password === "" || $confirm === "" || $address === "") {
+  $email = test_input($_POST["email"]);
+
+  if ($name === "" || $phone === "" || $password === "" || $confirm === "" || $address === "" || $email === "") {
     $textError = "Please enter information";
   } else {
     $sql = "SELECT * FROM client WHERE phone = '$phone' ";
@@ -26,7 +28,7 @@ if (isset($_POST["register"])) {
       if ($password === $confirm) {
         $password = md5($password);
         $time = date('Y-m-d H:i:s');
-        $sql = "INSERT INTO client (name, phone, password, created_at,address) VALUES ('$name', '$phone', '$password','$time','$address')";
+        $sql = "INSERT INTO client (name, phone, password, created_at,address,email) VALUES ('$name', '$phone', '$password','$time','$address','$email')";
         if ($conn->query($sql) === TRUE) {
           echo '<script language="javascript">alert("Đăng ký thành công"); window.location="login.php";</script>';
         } else {
@@ -83,38 +85,8 @@ if (isset($_POST["register"])) {
     <!-- page-wraper start -->
     <div id="page-wrapper">
         <!-- header-area start -->
-        <header>
-            <!-- header-top-area start -->
-            <div class="header-top-area" id="sticky-header">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6 col-md-2">
-                            <!-- logo-area start -->
-                            <div class="logo-area">
-                                <a href="index.html"><img src="../../../public/frontend/assetss/images/logo/1.png" alt="logo"></a>
-                            </div>
-                            <!-- logo-area end -->
-                        </div>
-                        <div class="col-md-7 d-none d-lg-block">
-                            <!-- menu-area start -->
-                            <div class="menu-area">
-                                <nav>
-                                    <ul>
-                                    <li class="active"><a href="index.php">Trang chủ</a></li>
-                                        <?php include '../web/partial/menu.php'; ?>
-                                        <li><a href="blog.php">Tin Tức</a></li>
-                                        <li><a href="contact.php">liên hệ</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                            <!-- menu-area end -->
-                        </div>
-                        <?php include '../web/partial/cart-ping.php'; ?>
+        <?php include '../web/partial/topBar.php'; ?>
 
-                    </div>
-                </div>
-            </div>
-        </header>
         <!-- header-area end -->
         <!-- breadcrumbs-area start -->
         <div class="breadcrumbs-area">
@@ -175,6 +147,15 @@ if (isset($_POST["register"])) {
                                                 placeholder="Địa Chỉ"/>
                                                 <span class="error"><?php echo $textError; ?></span>
                                             <span class="error"><?php echo $addressError; ?></span>
+                                    <!-- </form> -->
+                                </div>
+                                <div class="single-register">
+                                    <!-- <form action="#"> -->
+                                        <label>Email<span>*</span></label>
+                                        <input type="text" id="exampleNameemail" value="<?php echo $email ?>" name="email"
+                                                placeholder="Email"/>
+                                                <span class="error"><?php echo $textError; ?></span>
+                                            <span class="error"><?php echo $emailError; ?></span>
                                     <!-- </form> -->
                                 </div>
                                 <div class="single-register">

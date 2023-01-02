@@ -18,7 +18,9 @@ if (isset($_POST['login'])) {
     // print_r($user);
     $_SESSION['client'] = [
       'id' => $user['id'],
-      'phone' => $user['phone']
+      'phone' => $user['phone'],
+      'name'=>$user['name'],
+      'email'=>$user['email']
     ];
     header('Location: index.php');
   } else {
@@ -70,38 +72,8 @@ if (isset($_POST['login'])) {
     <!-- page-wraper start -->
     <div id="page-wrapper">
         <!-- header-area start -->
-        <header>
-            <!-- header-top-area start -->
-            <div class="header-top-area" id="sticky-header">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6 col-md-2">
-                            <!-- logo-area start -->
-                            <div class="logo-area">
-                            <a href="index.html"><img src="../../../public/frontend/assetss/images/logo/1.png" alt="logo"></a>
-                            </div>
-                            <!-- logo-area end -->
-                        </div>
-                        <div class="col-md-7 d-none d-lg-block">
-                            <!-- menu-area start -->
-                            <div class="menu-area">
-                                <nav>
-                                    <ul>
-                                    <li class="active"><a href="index.php">Trang chủ</a></li>
-                                        <?php include '../web/partial/menu.php'; ?>
-                                        <li><a href="blog.php">Tin Tức</a></li>
-                                        <li><a href="contact.php">liên hệ</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                            <!-- menu-area end -->
-                        </div>
-                        <?php include '../web/partial/cart-ping.php'; ?>
+        <?php include '../web/partial/topBar.php'; ?>
 
-                    </div>
-                </div>
-            </div>
-        </header>
         <!-- header-area end -->
         <!-- breadcrumbs-area start -->
         <div class="breadcrumbs-area">

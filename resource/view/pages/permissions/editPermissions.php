@@ -116,6 +116,10 @@ if ($permissions->num_rows > 0) {
                                                                     $module_name = "Quyền";
                                                                 } elseif ($module_name === "user") {
                                                                     $module_name = "Người dùng";
+                                                                } elseif ($module_name === "order") {
+                                                                    $module_name = "Order";
+                                                                } elseif ($module_name === "new") {
+                                                                    $module_name = "Bài viết";
                                                                 }
                                                     ?>
                                                                 <br><br><label class="perChecked"><input id='perChecked' style='margin-right: 5px;' name='inputPers' type='checkbox' checked value=value="<?php echo $row['id']; ?>"><?php echo $module_name; ?>

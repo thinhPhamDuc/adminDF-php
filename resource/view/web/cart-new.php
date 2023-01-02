@@ -52,37 +52,8 @@ include '../../../function/function-web.php';
     <!-- page-wraper start -->
     <div id="page-wrapper">
         <!-- header-area start -->
-        <header>
-            <!-- header-top-area start -->
-            <div class="header-top-area" id="sticky-header">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6 col-md-2">
-                            <!-- logo-area start -->
-                            <div class="logo-area">
-                                <a href="index.php"><img src="../../../public/frontend/assetss/images/logo/1.png" alt="logo"></a>
-                            </div>
-                            <!-- logo-area end -->
-                        </div>
-                        <div class="col-md-7 d-none d-lg-block">
-                            <!-- menu-area start -->
-                            <div class="menu-area">
-                                <nav>
-                                    <ul>
-                                        <li class="active"><a href="index.php">Trang chủ</a></li>
-                                        <?php include '../web/partial/menu.php'; ?>
-                                        <li><a href="blog.php">Tin Tức</a></li>
-                                        <li><a href="contact.php">liên hệ</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                            <!-- menu-area end -->
-                        </div>
-                        <?php include '../web/partial/cart-ping.php'; ?>
-                    </div>
-                </div>
-            </div>
-        </header>
+        <?php include '../web/partial/topBar.php'; ?>
+
         <!-- header-area end -->
         <!-- breadcrumbs-area start -->
         <div class="breadcrumbs-area">
@@ -172,7 +143,7 @@ include '../../../function/function-web.php';
                                         <tr class="cart-subtotal">
                                             <th>tiền hàng</th>
                                             <td>
-                                                <span class="amount">998,000đ</span>
+                                                <span class="amount"><?php echo $_SESSION['total']; ?>,000đ</span>
                                             </td>
                                         </tr>
                                         <tr class="shipping">
@@ -199,7 +170,7 @@ include '../../../function/function-web.php';
                                             <th>tổng</th>
                                             <td>
                                                 <strong>
-                                                    <span class="amount">998,000đ</span>
+                                                    <span class="amount"><?php echo $_SESSION['total']; ?>,000đ</span>
                                                 </strong>
                                             </td>
                                         </tr>

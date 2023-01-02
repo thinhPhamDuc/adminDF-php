@@ -92,7 +92,7 @@ $result = $conn->query($sql);
                                         </div>
                                         <div class="form-group">
                                             <label for="price_addProduct">Password:</label>
-                                            <input type="text"  id="password_addUser"  value="admin là mật khẩu mặc định" class="form-control">
+                                            <input type="text"  id="password_addUser"  placeholder="admin là mật khẩu mặc định" class="form-control">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
