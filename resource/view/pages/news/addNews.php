@@ -12,7 +12,7 @@ if (isset($_POST['addNew'])) {
 //   $file_store_mutiple = uploadMutipleImages('../../../../public/backend/assets/images/new/', '../main/manage-news.php');
   // End upload mutiple images
   if ($title !== "" && $description !== "") {
-    $sql = "INSERT INTO new (title, description, main_images,created_at,updated_at,deleted_at) VALUES ('$title', '$description', '$file_store', '$time', '$time',null)";
+    $sql = "INSERT INTO new (title, description, images,created_at,updated_at,deleted_at) VALUES ('$title', '$description', '$file_store', '$time', '$time',null)";
     
     if ($conn->query($sql) === TRUE) {
       $sql = "SELECT * FROM new ORDER BY id DESC LIMIT 1";

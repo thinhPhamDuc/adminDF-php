@@ -329,13 +329,6 @@ if (isset($_GET['category'])) {
                             </div>
                             <!-- single-shop end -->
                             <!-- singl-shop start -->
-                            <div class="single-shop mb-40">
-                                <div class="categories">
-                                    <h3>Lọc Giá</h3>
-                                </div>
-                                <div id="slider-range"></div>
-                                <input type="text" name="text" id="amount" />
-                            </div>
                             <!-- singl-shop end -->
                             <div class="single-shop mb-40">
                                 <div class="categories-title">

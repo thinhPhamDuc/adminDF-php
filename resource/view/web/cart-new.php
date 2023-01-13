@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 
 session_start();
 
+print_r($_SESSION['cart']);
 include '../../../database/database.php';
 include '../../../function/function-web.php';
 ?>
@@ -94,7 +95,7 @@ include '../../../function/function-web.php';
                                         </thead>
                                         <?php
                                             if (isset($_SESSION['cart'])) {
-                                                foreach ($_SESSION['cart'] as $itemCart) {
+                                                foreach ($_SESSION['cart'] as $key => $itemCart) {
                                             ?>
                                         <tbody>
                                             <tr>
@@ -102,9 +103,9 @@ include '../../../function/function-web.php';
                                                             alt="man" /></a></td>
                                                 <td class="product-name"><a href="#"><?php echo $itemCart['name']; ?></a></td>
                                                 <td class="product-price"><span class="amount"><?php echo $itemCart['price']; ?>,000đ</span></td>
-                                                <td class="product-quantity"><input type="number" value="<?php echo $itemCart['stock']; ?>"></td>
+                                                <td class="product-quantity"><input type="number" min="1" value="<?php echo $itemCart['stock']; ?>"></td>
                                                 <td class="product-subtotal"><?php echo $itemCart['total']; ?>,000đ</td>
-                                                <td class="product-remove"><a href="#"><i class="fa fa-times"></i></a>
+                                                <td class="product-remove"><a href="deleteProductCart.php?id=<?php echo $key?>"><i class="fa fa-times"></i></a>
                                                 </td>
                                             </tr>
                                            

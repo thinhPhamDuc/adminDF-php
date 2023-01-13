@@ -224,6 +224,50 @@ $(document).ready(function () {
     $("#id_deleteNewTag").val(data[0]);
   });
 
+  //New
+  $(".editNewBtn").on("click", function () {
+    $("#editNew").modal("show");
+    $tr = $(this).closest("tr");
+    let data = $tr
+      .children("td")
+      .map(function () {
+        return $(this).text();
+      })
+      .get();
+    console.log(data);
+    let category_id = $(this)
+      .parents("tr")
+      .find(".field-category")
+      .data("category_id");
+    let tag_id = $(this).parents("tr").find(".field-tag").data("tag_id");
+    tag_id = tag_id.split(",");
+    $(".form-tag input").prop("checked", false);
+    tag_id.forEach(function (value) {
+      if (value !== "") {
+        $(".form-tag .tag-" + value).prop("checked", true);
+      }
+    });
+    $("#id_editProduct").val(data[0]);
+    $("#img_editProduct").attr(
+      "src",
+      $tr.children(".imgProductBtn").children().attr("src")
+    );
+    $("#title_editNew").val(data[2]);
+    $("#description_editNew").val(data[3]);
+  });
+
+  $(".deleteNewBtn").on("click", function () {
+    $("#deleteNew").modal("show");
+    $tr = $(this).closest("tr");
+    let data = $tr
+      .children("td")
+      .map(function () {
+        return $(this).text();
+      })
+      .get();
+    console.log(data);
+    $("#id_deleteNew").val(data[0]);
+  });
 
   $(".editOrderBtn").on("click", function () {
     $("#editOrders").modal("show");

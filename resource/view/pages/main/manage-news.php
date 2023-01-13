@@ -92,11 +92,7 @@ $users = $conn->query($sql);
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <form action="../products/exportProduct.php" method="post">
-                            <button type="submit" name="export" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</button>
-                        </form>
-
+                        <h1 class="h3 mb-0 text-gray-800">Quản lí bài viết</h1>
                     </div>
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <button class="btn btn-primary" data-toggle="modal" data-target="#addProduct" type="button">Thêm</button>
@@ -133,7 +129,8 @@ $users = $conn->query($sql);
                                         </div>
                                         <div class="form-group">
                                             <label for="description_addNew">Description:</label>
-                                            <input type="text" name="description_addNew" id="description_addNew" class="form-control">
+                                            <!-- <input type="text" name="description_addNew" id="description_addNew" class="form-control"> -->
+                                            <textarea rows="4" cols="50" type="text" name="description_addNew" id="description_addNew" class="form-control"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="tags_addNew">Tags:</label>
@@ -157,16 +154,16 @@ $users = $conn->query($sql);
                         </div>
                     </div>
                     <!-- ///========= Edit Modal =========/// -->
-                    <div class="modal fade" id="editProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="editNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form action="../news/editNew.php" method="POST" enctype="multipart/form-data">
+                                <form action="../news/editNews.php" method="POST" enctype="multipart/form-data">
                                     <div class="modal-header">
                                         <h4 class="modal-title">Edit Product</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                     </div>
                                     <div class="modal-body">
-                                        <input type="hidden" id="id_editProduct" name="id_editProduct">
+                                        <input type="hidden" id="id_editProduct" name="id_editNew">
                                         <div class="form-group position-relative text-center">
                                             <img class="form__img" width="100" id="img_editProduct">
                                             <label for="fileProduct" class="form__label">
@@ -175,24 +172,13 @@ $users = $conn->query($sql);
                                                 <input type="file" name="fileProduct" id="fileProductEdit">
                                             </label>
                                         </div>
-                                        <div class="form-group position-relative text-center">
-                                            <div class="upload__box">
-                                                <div class="upload__btn-box">
-                                                    <label class="upload__btn">
-                                                        <p>Upload images</p>
-                                                        <input type="file" name="files[]" multiple="" data-max_length="20" class="upload__inputfile">
-                                                    </label>
-                                                </div>
-                                                <div class="upload__img-wrap"></div>
-                                            </div>
+                                        <div class="form-group">
+                                            <label for="title_editNew">Title:</label>
+                                            <input type="text" name="title_editNew" id="title_editNew" class="form-control">
                                         </div>
                                         <div class="form-group">
-                                            <label for="name_editProduct">Name:</label>
-                                            <input type="text" name="name_editProduct" id="name_editProduct" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="description_editProduct">Description:</label>
-                                            <input type="text" name="description_editProduct" id="description_editProduct" class="form-control">
+                                            <label for="description_editNew">Description:</label>
+                                            <textarea rows="4" cols="50" name="description_editNew" id="description_editNew" class="form-control"></textarea>
                                         </div>
                                         <div class="form-group form-tag">
                                             <label for="tags_editProduct">Tags:</label>
@@ -204,7 +190,7 @@ $users = $conn->query($sql);
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" name="editProduct" class="btn btn-success">Edit</button>
+                                        <button type="submit" name="editNew" class="btn btn-success">Edit</button>
                                         <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
                                     </div>
                                 </form>
@@ -212,17 +198,17 @@ $users = $conn->query($sql);
                         </div>
                     </div>
                     <!-- ///========= Delete Modal =========/// -->
-                    <div class="modal fade" id="deleteProduct">
+                    <div class="modal fade" id="deleteNew">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form action="../products/deleteProduct.php" method="POST" enctype="multipart/form-data">
+                                <form action="../news/deleteNews.php" method="POST" enctype="multipart/form-data">
                                     <div class="modal-header">
                                         <h4 class="modal-title">Delete Product</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                     </div>
                                     <div class="modal-body">
                                         <h5>Are you sure?</h5>
-                                        <input type="hidden" id="id_deleteProduct" name="id_deleteProduct">
+                                        <input type="hidden" id="id_deleteNew" name="id_deleteNew">
                                         <div class="form-group">
                                             <input type="hidden" name="fileProduct" id="fileProduct">
                                         </div>
@@ -254,14 +240,14 @@ $users = $conn->query($sql);
                                     <tr>
                                         <td style="display: none;"><?php echo $row['id']; ?></td>
                                         <td class="imgProductBtn text-center">
-                                            <img src="<?php if ($row['main_images']) {
-                                                            echo $row['main_images'];
+                                            <img src="<?php if ($row['images']) {
+                                                            echo $row['images'];
                                                         } else {
                                                             echo '../../../../public/backend/assets/images/defaultImages.png';
                                                         } ?>" width="100" alt="">
                                         </td>
-                                        <td><?php echo $row['title']; ?></td>
-                                        <td style="width:90px"><?php echo $row['description']; ?></td>
+                                        <td style="overflow:hidden; white-space:nowrap; text-overflow:ellipsis; width:100px;"><?php echo $row['title']; ?></td>
+                                        <td><p style="overflow:hidden; white-space:nowrap; text-overflow:ellipsis; width:100px;"><?php echo $row['description']; ?></p></td>
                                             <?php
                                             $tags = getNewTags($row['id']);
                                             ?>
@@ -277,8 +263,8 @@ $users = $conn->query($sql);
                                             } ?>
                                         </td>
                                         <td>
-                                            <button type="button" data-toggle="modal" class="btn btn-success editProductBtn" data-target="#editProduct">Edit</button>
-                                            <button type="button" class="btn btn-danger deleteProductBtn">Delete</button>
+                                            <button type="button" data-toggle="modal" class="btn btn-success editNewBtn" data-target="#editNew">Edit</button>
+                                            <button type="button" class="btn btn-danger deleteNewBtn">Delete</button>
                                         </td>
 
                                     </tr>
